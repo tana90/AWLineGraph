@@ -65,9 +65,12 @@ extension AWLineGraph {
         let elements = data.suffix(maxNumberOfElements)
         
         // Calculate max value
-        let maxValue: CGFloat = elements.map { CGFloat($0.yValue) }
-            .max { $0 < $1 } ?? 0
+        let maxValue: Double = elements.map { $0.yValue }
+            .max { $0 < $1 } ?? 0.0
         
+        // Calculate min value
+        let minValue: Double = elements.map { $0.yValue }
+            .min { $0 < $1 } ?? 0.0
         
         let bottomBase = frame.size.height - 22
         let graphHeight = bottomBase
@@ -104,7 +107,8 @@ extension AWLineGraph {
                 let label = CATextLayer()
                 label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 22)
                 label.position = CGPoint(x: verticalSpacing * CGFloat(iterator),
-                                         y: bottomBase - (CGFloat(element.yValue) * graphHeight) / maxValue - 10)
+                                         y: bottomBase - (CGFloat(element.yValue - minValue) *
+                                                            graphHeight) / CGFloat(maxValue - minValue) - 10)
                 label.alignmentMode = .center
                 label.string = element.yValue.compact()
                 let font = UIFont.systemFont(ofSize: 7.0)
@@ -135,7 +139,8 @@ extension AWLineGraph {
             // Draw cicles
             
             circle(from: CGPoint(x: verticalSpacing * CGFloat(iterator),
-                                 y: bottomBase - (CGFloat(element.yValue) * graphHeight) / maxValue),
+                                 y: bottomBase - (CGFloat(element.yValue - minValue)
+                                                    * graphHeight) / CGFloat(maxValue - minValue)),
                    radius: circleRadius,
                    color: tintColor)
             
@@ -144,9 +149,11 @@ extension AWLineGraph {
             if iterator < maxNumberOfElements - 1 {
                 let nextElement = elements[iterator + 1]
                 line(from: CGPoint(x: verticalSpacing * CGFloat(iterator),
-                                   y: bottomBase - ((CGFloat(element.yValue) * graphHeight) / maxValue)),
+                                   y: bottomBase - ((CGFloat(element.yValue - minValue) *
+                                                        graphHeight) / CGFloat(maxValue - minValue))),
                      to: CGPoint(x: verticalSpacing * CGFloat(iterator + 1),
-                                 y: bottomBase - ((CGFloat(nextElement.yValue) * graphHeight) / maxValue)),
+                                 y: bottomBase - ((CGFloat(nextElement.yValue - minValue) *
+                                                    graphHeight) / CGFloat(maxValue - minValue))),
                      color: tintColor,
                      width: lineWidth)
             }
