@@ -102,15 +102,15 @@ extension AWLineGraph {
 
             if showTopLabels {
                 let label = CATextLayer()
-                label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing, height: 33)
+                label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 22)
                 label.position = CGPoint(x: verticalSpacing * CGFloat(iterator),
                                          y: bottomBase - (CGFloat(element.yValue) * graphHeight) / maxValue - 10)
                 label.alignmentMode = .center
-                label.string = String(element.yValue)
-                let font = UIFont.systemFont(ofSize: 8.0)
+                label.string = element.yValue.compact()
+                let font = UIFont.systemFont(ofSize: 7.0)
                 let fontName = font.fontName as NSString
                 label.font = CGFont(fontName)
-                label.fontSize = 13
+                label.fontSize = 10
                 label.foregroundColor = labelsColor.cgColor
                 layer.addSublayer(label)
             }
@@ -119,15 +119,15 @@ extension AWLineGraph {
             
             if showBottomLabels {
                 let label = CATextLayer()
-                label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing, height: 33)
+                label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 30)
                 label.position = CGPoint(x: verticalSpacing * CGFloat(iterator),
                                          y: bottomBase + 22)
                 label.alignmentMode = .center
                 label.string = element.xValue
-                let font = UIFont.systemFont(ofSize: 8.0)
+                let font = UIFont.systemFont(ofSize: 7.0)
                 let fontName = font.fontName as NSString
                 label.font = CGFont(fontName)
-                label.fontSize = 13
+                label.fontSize = 10
                 label.foregroundColor = labelsColor.cgColor
                 layer.addSublayer(label)
             }
@@ -182,5 +182,18 @@ extension AWLineGraph {
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.lineWidth = width
         layer.addSublayer(shapeLayer)
+    }
+}
+
+extension Double {
+    
+    func compact() -> String {
+        if self >= 1000000 {
+            return String(format: "%.1fm", Double(self) / 1000000)
+        } else if self >= 1000 {
+            return String(format: "%.1fk", Double(self) / 1000)
+        } else {
+            return String(format: "%.0f", self)
+        }
     }
 }
