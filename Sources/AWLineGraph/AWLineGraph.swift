@@ -12,6 +12,11 @@ import UIKit
 public struct AWLineGraphData {
     var xValue: String
     var yValue: Double
+    
+    public init(xValue: String, yValue: Double) {
+        self.xValue = xValue
+        self.yValue = yValue
+    }
 }
 
 // MARK: - UIView
