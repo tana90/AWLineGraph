@@ -69,7 +69,7 @@ extension AWLineGraph {
             .max { $0 < $1 } ?? 0
         
         
-        let bottomBase = frame.size.height - 44
+        let bottomBase = frame.size.height - 22
         let graphHeight = bottomBase
         var verticalSpacing = frame.size.width / CGFloat(maxNumberOfElements)
         verticalSpacing += verticalSpacing / CGFloat(maxNumberOfElements - 1)
