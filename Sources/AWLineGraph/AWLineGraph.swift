@@ -16,7 +16,7 @@ public struct AWLineGraphData {
 
 // MARK: - UIView
 
-open class AWLineGraph: UIView {
+public class AWLineGraph: UIView {
 
     @IBInspectable var maxNumberOfEntries: Int = 10
     @IBInspectable var showVerticalGrid: Bool = true
