@@ -16,7 +16,7 @@ public struct AWLineGraphData {
 
 // MARK: - UIView
 
-final class AWLineGraph: UIView {
+public final class AWLineGraph: UIView {
 
     @IBInspectable var maxNumberOfEntries: Int = 10
     @IBInspectable var showVerticalGrid: Bool = true
@@ -27,13 +27,13 @@ final class AWLineGraph: UIView {
     @IBInspectable var lineWidth: CGFloat = 2.0
     @IBInspectable var circleRadius: CGFloat = 4.0
     
-    var data: [AWLineGraphData] = [] {
+    public var data: [AWLineGraphData] = [] {
         didSet {
             render()
         }
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         if data.count > 0 {
             render()
