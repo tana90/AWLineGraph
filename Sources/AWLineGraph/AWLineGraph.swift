@@ -115,6 +115,7 @@ extension AWLineGraph {
                 let fontName = font.fontName as NSString
                 label.font = CGFont(fontName)
                 label.fontSize = 10
+                label.contentsScale = UIScreen.main.scale
                 label.foregroundColor = labelsColor.cgColor
                 layer.addSublayer(label)
             }
@@ -132,6 +133,7 @@ extension AWLineGraph {
                 let fontName = font.fontName as NSString
                 label.font = CGFont(fontName)
                 label.fontSize = 10
+                label.contentsScale = UIScreen.main.scale
                 label.foregroundColor = labelsColor.cgColor
                 layer.addSublayer(label)
             }
