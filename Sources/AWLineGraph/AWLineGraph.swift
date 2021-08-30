@@ -50,13 +50,13 @@ public class AWLineGraph: UIView {
 
 extension AWLineGraph {
     
-    func removeLayers() {
+    private func removeLayers() {
         layer.sublayers?.forEach({ layer in
             layer.removeFromSuperlayer()
         })
     }
     
-    func render() {
+    private func render() {
         
         removeLayers()
         
@@ -110,7 +110,13 @@ extension AWLineGraph {
                 var y = bottomBase - (CGFloat(element.yValue - minValue) *
                                         graphHeight) / CGFloat(maxValue - minValue) - 10
                 if x.isNaN { x = 0 }
-                if y.isNaN { y = -10 }
+                if y.isNaN {
+                    if element.yValue != 0 {
+                        y = -10
+                    } else {
+                        y = bottomBase - 10
+                    }
+                }
                 label.position = CGPoint(x: x, y: y)
                 label.alignmentMode = .center
                 label.string = element.yValue.compact()
@@ -150,6 +156,7 @@ extension AWLineGraph {
             circle(from: CGPoint(x: verticalSpacing * CGFloat(iterator),
                                  y: bottomBase - (CGFloat(element.yValue - minValue)
                                                     * graphHeight) / CGFloat(maxValue - minValue)),
+                   value: element.yValue,
                    radius: circleRadius,
                    color: tintColor)
             
@@ -163,25 +170,39 @@ extension AWLineGraph {
                      to: CGPoint(x: verticalSpacing * CGFloat(iterator + 1),
                                  y: bottomBase - ((CGFloat(nextElement.yValue - minValue) *
                                                     graphHeight) / CGFloat(maxValue - minValue))),
+                     value: element.yValue,
                      color: tintColor,
                      width: lineWidth)
             }
         }
     }
     
-    func line(from startPoint: CGPoint,
+    private func line(from startPoint: CGPoint,
               to endPoint: CGPoint,
+              value: Double = 0,
               color: UIColor = .black,
               width: CGFloat = 1.0) {
         
         var xStart = startPoint.x
         var yStart = startPoint.y
         if xStart.isNaN { xStart = 0 }
-        if yStart.isNaN { yStart = 0 }
+        if yStart.isNaN {
+            if value != 0 {
+                yStart = 0
+            } else {
+                yStart = frame.size.height - 22
+            }
+        }
         var xEnd = endPoint.x
         var yEnd = endPoint.y
         if xEnd.isNaN { xEnd = 0 }
-        if yEnd.isNaN { yEnd = 0 }
+        if yEnd.isNaN {
+            if value != 0 {
+                yEnd = 0
+            } else {
+                yEnd = frame.size.height - 22
+            }
+        }
         
         let line = CAShapeLayer()
         let linePath = UIBezierPath()
@@ -193,14 +214,21 @@ extension AWLineGraph {
         layer.addSublayer(line)
     }
     
-    func circle(from startPoint: CGPoint,
+    private func circle(from startPoint: CGPoint,
+                value: Double = 0,
                 radius: CGFloat = 5,
                 color: UIColor = .black,
                 width: CGFloat = 3.0) {
         var x = startPoint.x
         var y = startPoint.y
         if x.isNaN { x = 0 }
-        if y.isNaN { y = 0 }
+        if y.isNaN {
+            if value != 0 {
+                y = 0
+            } else {
+                y = frame.size.height - 22
+            }
+        }
         let circlePath = UIBezierPath(arcCenter: CGPoint(x: x, y: y),
                                       radius: radius,
                                       startAngle: CGFloat(0),
@@ -217,7 +245,7 @@ extension AWLineGraph {
 
 extension Double {
     
-    func compact() -> String {
+    fileprivate func compact() -> String {
         if self >= 1000000 {
             return String(format: "%.1fm", Double(self) / 1000000)
         } else if self >= 1000 {
