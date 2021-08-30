@@ -110,7 +110,7 @@ extension AWLineGraph {
                 var y = bottomBase - (CGFloat(element.yValue - minValue) *
                                         graphHeight) / CGFloat(maxValue - minValue) - 10
                 if x.isNaN { x = 0 }
-                if y.isNaN { y = 0 }
+                if y.isNaN { y = -10 }
                 label.position = CGPoint(x: x, y: y)
                 label.alignmentMode = .center
                 label.string = element.yValue.compact()
