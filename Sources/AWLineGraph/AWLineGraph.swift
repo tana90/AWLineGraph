@@ -22,7 +22,7 @@ public struct AWLineGraphData {
 // MARK: - UIView
 
 public class AWLineGraph: UIView {
-
+    
     @IBInspectable var maxNumberOfEntries: Int = 10
     @IBInspectable var showVerticalGrid: Bool = true
     @IBInspectable var showHorizontalGrid: Bool = true
@@ -78,7 +78,7 @@ extension AWLineGraph {
         verticalSpacing += verticalSpacing / CGFloat(maxNumberOfElements - 1)
         var horizontalSpacing = bottomBase / 3
         horizontalSpacing += horizontalSpacing / 2
-
+        
         elements.enumerated().forEach { iterator, element in
             
             // Draw vertical grid
@@ -100,19 +100,17 @@ extension AWLineGraph {
                          width: 0.3)
                 }
             }
-
+            
             // Draw top labels
-
+            
             if showTopLabels {
                 let label = CATextLayer()
                 label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 22)
-                let x = verticalSpacing * CGFloat(iterator)
+                var x = verticalSpacing * CGFloat(iterator)
                 var y = bottomBase - (CGFloat(element.yValue - minValue) *
                                         graphHeight) / CGFloat(maxValue - minValue) - 10
-                if y.isNaN { y = bottomBase - 10 }
-                print("-------")
-                print(x)
-                print(y)
+                if x.isNaN { x = 0 }
+                if y.isNaN { y = 0 }
                 label.position = CGPoint(x: x, y: y)
                 label.alignmentMode = .center
                 label.string = element.yValue.compact()
@@ -129,9 +127,13 @@ extension AWLineGraph {
             
             if showBottomLabels {
                 let label = CATextLayer()
+                var x = verticalSpacing * CGFloat(iterator)
+                var y = bottomBase + 22
+                if x.isNaN { x = 0 }
+                if y.isNaN { y = 0 }
                 label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 30)
-                label.position = CGPoint(x: verticalSpacing * CGFloat(iterator),
-                                         y: bottomBase + 22)
+                label.position = CGPoint(x: x,
+                                         y: y)
                 label.alignmentMode = .center
                 label.string = element.xValue
                 let font = UIFont.systemFont(ofSize: 7.0)
@@ -171,10 +173,20 @@ extension AWLineGraph {
               to endPoint: CGPoint,
               color: UIColor = .black,
               width: CGFloat = 1.0) {
+        
+        var xStart = startPoint.x
+        var yStart = startPoint.y
+        if xStart.isNaN { xStart = 0 }
+        if yStart.isNaN { yStart = 0 }
+        var xEnd = endPoint.x
+        var yEnd = endPoint.y
+        if xEnd.isNaN { xEnd = 0 }
+        if yEnd.isNaN { yEnd = 0 }
+        
         let line = CAShapeLayer()
         let linePath = UIBezierPath()
-        linePath.move(to: startPoint)
-        linePath.addLine(to: endPoint)
+        linePath.move(to: CGPoint(x: xStart, y: yStart))
+        linePath.addLine(to: CGPoint(x: xEnd, y: yEnd))
         line.path = linePath.cgPath
         line.strokeColor = color.cgColor
         line.lineWidth = width
@@ -185,7 +197,11 @@ extension AWLineGraph {
                 radius: CGFloat = 5,
                 color: UIColor = .black,
                 width: CGFloat = 3.0) {
-        let circlePath = UIBezierPath(arcCenter: startPoint,
+        var x = startPoint.x
+        var y = startPoint.y
+        if x.isNaN { x = 0 }
+        if y.isNaN { y = 0 }
+        let circlePath = UIBezierPath(arcCenter: CGPoint(x: x, y: y),
                                       radius: radius,
                                       startAngle: CGFloat(0),
                                       endAngle: CGFloat(Double.pi * 2),
