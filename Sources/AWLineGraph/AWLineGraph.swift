@@ -106,11 +106,12 @@ extension AWLineGraph {
             if showTopLabels {
                 let label = CATextLayer()
                 label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 22)
+                var x = verticalSpacing * CGFloat(iterator)
                 var y = bottomBase - (CGFloat(element.yValue - minValue) *
                                         graphHeight) / CGFloat(maxValue - minValue) - 10
+                if x == 0 { x = 1 }
                 if y == 0 { y = -10 }
-                label.position = CGPoint(x: verticalSpacing * CGFloat(iterator),
-                                         y: y)
+                label.position = CGPoint(x: x, y: y)
                 label.alignmentMode = .center
                 label.string = element.yValue.compact()
                 let font = UIFont.systemFont(ofSize: 7.0)
