@@ -107,8 +107,9 @@ extension AWLineGraph {
                 let label = CATextLayer()
                 label.frame = CGRect(x: 0, y: 0, width: horizontalSpacing * 2, height: 22)
                 let x = verticalSpacing * CGFloat(iterator)
-                let y = bottomBase - (CGFloat(element.yValue - minValue) *
+                var y = bottomBase - (CGFloat(element.yValue - minValue) *
                                         graphHeight) / CGFloat(maxValue - minValue) - 10
+                if y.isNaN { y = bottomBase - 10 }
                 print("-------")
                 print(x)
                 print(y)
